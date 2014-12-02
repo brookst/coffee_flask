@@ -2,7 +2,12 @@
 Coffee Flask
 ============
 
-Coffee scheduler web application.
+Coffee scheduler web application written with `python`_-`flask`_ and `javascript`_-`jquery`_.
+
+.. _python: http://www.python.org
+.. _flask: http://flask.pocoo.org
+.. _javascript: http://www.ecmascript.org
+.. _jquery: http://jquery.com
 
 Setup
 =====
@@ -22,7 +27,7 @@ To deactivate the `VirtualEnv`_, run ``deactivate``. To work on the environment 
 
 .. _Virtual env docs: http://virtualenv.readthedocs.org/en/latest/virtualenv.html#installation
 .. _python-virtualenv: http://packages.ubuntu.com/utopic/python/python-virtualenv
-.. _Ubuntu: http://www.ubuntu.com/
+.. _Ubuntu: http://www.ubuntu.com
 
 Standalone running
 ------------------
@@ -32,3 +37,12 @@ Run the ``coffee_flask.py`` script as::
 
 Messages will be printed to the console and the application will be available on http://localhost:5000/
 
+Attribution
+===========
+
+Colour palette: `french vanilla`_ by 'despise'
+
+SSE example: `Flask snippet`_ by Oskar Blom
+
+.. _french vanilla: http://www.colourlovers.com/palette/45488/french_vanilla
+.. _Flask snippet: http://flask.pocoo.org/snippets/116/

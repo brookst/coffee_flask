@@ -1,13 +1,136 @@
 {% extends "base.html" %}
-{% block script %}<script type="text/javascript">
-    function addThirster(thirster) {
-        var thirstyDiv = document.getElementById("thirsty");
+{% block script %}
+<script type="text/javascript">
+    //Holding variable for users name
+    var thirst_name;
+
+    //Sever Sent Event stream
+    var evtSrc = new EventSource("/subscribe");
+    evtSrc.onmessage = function(e) {
+        var msgs = $.parseJSON(e.data);
+        msgs.forEach(function(msg) {
+            updateThirster(msg.name, msg.start, msg.end);
+        });
+    };
+
+    //Defaults
+    var START_TIME = 210;
+    var END_TIME = 360;
+
+    //Time string normalisation
+    function addZero(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    function toTime(min, offset) {
+        var hour = Math.floor((min + offset) / 60);
+        var minute = addZero((min + offset) % 60);
+        return hour + ':' + minute;
+    }
+    function fromTime(str) {
+        var comp = str.split(':');
+        var min = comp[0] * 60 + parseInt(comp[1]);
+        return min;
+    }
+
+    //Add a remote Thirster
+    function addThirster(name, start="4:00", end="5:00") {
+        var para = $('<div display=block id=' + name + '>');
+        $("#thirsty").append(para);
+        var label = $('<div class=label>' + name + '</div>');
+        para.append(label);
+        var div = $('<div class=slider id=' + name + '>' + '</div>');
+        para.append(div);
+        div.slider({
+            range: true,
+            disabled: true,
+            min: START_TIME,
+            max: END_TIME,
+            values: [fromTime(start), fromTime(end)],
+        });
+        return div;
+    }
+
+    //Recieve an update for a Thirster
+    function updateThirster(name, start, end) {
+        var para = $("#" + name);
+        if (para.length < 1) {
+            //Check it isn't current user
+            if (window.thirst_name == null || name != window.thirst_name) {
+                addThirster(name, start, end);
+            }
+        }
+    }
+
+    //Add local thirster
+    function addNew() {
+        var para = $('<div class=anon id=anon>');
+        $("#self").append(para);
+        var label = $('<div class=label>');
+        var formName = $('<input type=text id=name name=name value=Dave>');
+        label.append(formName);
+        para.append(label)
+        var div = $('<div class=slider id=' + name + '>' + '</div>');
+        para.append(div);
+        div.slider({
+            range: true,
+            min: START_TIME,
+            max: END_TIME,
+            values: [ 240, 300 ],
+            slide: function( event, ui ) {
+                $('#start').val(toTime(ui.values[0], 0 ));
+                $('#end').val(toTime(ui.values[1], 0));
+            }
+        }).each(function() {
+            var opt = $(this).data().uiSlider.options;
+            var vals = opt.max - opt.min;
+            $(this).append(el);
+            for (var i = 0; i <= vals; i++) {
+                if ( i % 10 == 0 ){
+                    var el = $('<label>'+toTime(i, opt.min)+'</label>').css('left',(i/vals*100)+'%');
+                    $(this).append(el);
+                }
+              }
+        });
+    }
+
+    //Set up interactive elements
+    function buildThirsters () {
+        var thirsty=[{% for thirster in thirsters %}
+        addThirster("{{ thirster.name }}", "{{ thirster.start }}", "{{ thirster.end }}"),
+        {% endfor %}
+        addNew(),
+        ]
+        $('#start').val('4:00');
+        $('#end').val('5:30');
     }
     function initialise() {
         var thirstyDiv = document.getElementById("thirsty");
         thirstyDiv.innerHTML = "Thirsty person";
+        buildThirsters();
+        $('#thirster').on('submit', function(e){
+            window.thirst_name = $("#name", this).val();
+            e.preventDefault();
+            $.ajax({
+               type: "POST",
+               url: "/thirst",
+               data: $(this).serialize(),
+            });
+        });
     }
-</script>{% endblock %}
+</script>
+{% endblock %}
 {% block body %}
+<section id="sliders">
+<form id="thirster">
 <div id="thirsty"></div>
+<div id="self"></div>
+<div id="range"><input type=text id=start name=start class="range" value=4:00 readonly/><input type=text id=end name=end class="range" value=5:30 readonly/></div>
+<p>
+<div id="button"><input type="submit" id=submit value="Submit"></div>
+</p>
+</form>
+</section>
 {% endblock %}
