@@ -41,7 +41,7 @@
         $("#thirsty").append(para);
         var label = $('<div class=label>' + name + '</div>');
         para.append(label);
-        var div = $('<div class=slider id=' + name + '>' + '</div>');
+        var div = $('<div class=slider id=' + name + '-slider>' + '</div>');
         para.append(div);
         div.slider({
             range: true,
@@ -61,6 +61,8 @@
             if (window.thirst_name == null || name != window.thirst_name) {
                 addThirster(name, start, end);
             }
+        } else {
+            var slider = $("#" + name + "-slider").slider("values", [fromTime(start), fromTime(end)]);
         }
     }
 
@@ -82,6 +84,9 @@
             slide: function( event, ui ) {
                 $('#start').val(toTime(ui.values[0], 0 ));
                 $('#end').val(toTime(ui.values[1], 0));
+            },
+            change: function( event, ui ) {
+                $('#thirster').submit();
             }
         }).each(function() {
             var opt = $(this).data().uiSlider.options;
