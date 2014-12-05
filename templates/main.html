@@ -93,7 +93,7 @@
             var vals = opt.max - opt.min;
             $(this).append(el);
             for (var i = 0; i <= vals; i++) {
-                if ( i % 10 == 0 ){
+                if ( i % 20 == 0 ){
                     var el = $('<label>'+toTime(i, opt.min)+'</label>').css('left',(i/vals*100)+'%');
                     $(this).append(el);
                 }
