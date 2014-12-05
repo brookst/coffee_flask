@@ -3,11 +3,17 @@
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans' type='text/css'>
 <style>
 body {
+    font-family: 'Open Sans', sans-serif;
+    color: #5F3711;
     margin: 0;
     padding: 0;
     background: #D4C098;
+}
+H1 {
+    text-align: center;
 }
 section.sliders {
 }
@@ -24,7 +30,7 @@ div.anon {
 }
 input {
     border: 0;
-    color: #000;
+    color: #5F3711;
     background: none;
 }
 input#name {
@@ -35,11 +41,16 @@ input#submit {
     padding: 30px;
     margin-left: auto;
     margin-right: auto;
+    visibility: hidden;
 }
 input.range {
     border: 0;
+    text-align: center;
+    width: 49%;
+    font-size: 17.6px;
 }
 label {
+    color: #5F3711;
     position: absolute;
     width: 20px;
     margin-left: -15px;
