@@ -71,7 +71,7 @@
         var para = $('<div class=anon id=anon>');
         $("#self").append(para);
         var label = $('<div class=label>');
-        var formName = $('<input type=text id=name name=name value=Dave>');
+        var formName = $('<input type=text id=name name=name value=Name>');
         label.append(formName);
         para.append(label)
         var div = $('<div class=slider id=' + name + '>' + '</div>');
@@ -116,6 +116,7 @@
         thirstyDiv.innerHTML = "Thirsty person";
         buildThirsters();
         $('#thirster').on('submit', function(e){
+            if($("#name", this).val() == "Name") return;
             window.thirst_name = $("#name", this).val();
             e.preventDefault();
             $.ajax({
