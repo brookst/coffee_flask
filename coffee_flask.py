@@ -44,11 +44,8 @@ class Thirster(object):
         """Serialise and join every Thirster for transmission"""
         ret = []
         for thirster in THIRSTERS:
-            print thirster.encode()
             ret.append(thirster.dict())
-        print ret
         ret = json.dumps(ret)
-        print ret
         return ret
 
     def encode(self):
@@ -69,17 +66,12 @@ def main():
 def thirst():
     """Indicate waiting for coffee"""
     name = request.args.get('name', '')
-    print(request.form['name'],
-          request.form['start'],
-          request.form['end'],
-         )
 
     Thirster.add_thirster(request.form)
 
     def notify():
         """Send out update to all connected clients"""
         msg = Thirster.encode_all()
-        print msg
         for sub in SUBSCRIPTIONS:
             sub.put(msg)
     gevent.spawn(notify)
@@ -90,6 +82,7 @@ def thirst():
 @APP.route("/subscribe")
 def subscribe():
     """Event streamer"""
+    APP.logger.info("New subscriber")
     def gen():
         """Closure around a connected client"""
         queue = Queue()
